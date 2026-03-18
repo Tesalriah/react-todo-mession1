@@ -1,8 +1,7 @@
 @import 'tailwindcss';
-body {
-    @apply bg-blue-50;
-}
+
 #root {
     min-height: 100vh;
     position: relative;
+    background-color: #eff6ff;
 }
