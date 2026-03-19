@@ -9,15 +9,8 @@ function App() {
     ])
     const lastId = useRef(4)
 
-    const doSubmit = (e) => {
-        e.preventDefault()
-        const todo = e.target.todo.value
-        if (!todo) {
-            alert('할일을 입력해주세요')
-            return
-        }
-        setTodos([...todos, { id: lastId.current++, content: todo, completed: false }])
-        e.target.todo.value = ''
+    const addTodo = (content) => {
+        setTodos([...todos, { id: lastId.current++, content: content, completed: false }])
     }
 
     const deleteTodo = (id) => {
@@ -39,7 +32,7 @@ function App() {
             <div className="font-bold text-[4rem] bg-gradient-to-b from-blue-500 to-purple-500 bg-clip-text text-transparent">
                 Just Do It
             </div>
-            <TodoForm doSubmit={doSubmit} removeCompleted={removeCompleted} />
+            <TodoForm removeCompleted={removeCompleted} addTodo={addTodo} />
             <ul className="mt-5">
                 {todos.map((todo) => (
                     <li

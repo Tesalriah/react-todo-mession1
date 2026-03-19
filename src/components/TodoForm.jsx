@@ -1,4 +1,15 @@
-function TodoForm({ doSubmit, removeCompleted }) {
+function TodoForm({ removeCompleted, addTodo }) {
+    const doSubmit = (e) => {
+        e.preventDefault()
+        const todo = e.target.todo.value
+        if (!todo) {
+            alert('할일을 입력해주세요')
+            return
+        }
+        addTodo(todo)
+        e.target.todo.value = ''
+    }
+
     return (
         <>
             <form className="mt-5 w-full" onSubmit={doSubmit}>
