@@ -1,18 +1,24 @@
 import { createContext, useEffect, useState } from 'react'
-import { getStorage } from '../utils/storage'
+import { getStorage, setStorage } from '../utils/storage'
 
 export const TodoContext = createContext()
 
 export function TodoProvider({ children }) {
     const [todos, setTodos] = useState(getStorage())
+    const today = new Date().toISOString().split('T')[0]
+    const [selectedDate, setSelectedDate] = useState(today)
 
     useEffect(() => {
-        localStorage.setItem('todos', JSON.stringify(todos))
+        setStorage(todos)
     }, [todos])
 
-    const addTodo = (content) => {
+    const addTodo = (content, date) => {
         const newId = todos.length > 0 ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1
-        setTodos([...todos, { id: newId, content: content, completed: false }])
+        setTodos([...todos, { id: newId, content: content, date: date, completed: false }])
+    }
+
+    const selecteDayTodo = (date) => {
+        return todos.filter((todo) => todo.date === date)
     }
 
     const deleteTodo = (id) => {
@@ -23,8 +29,7 @@ export function TodoProvider({ children }) {
         setTodos(newTodos)
     }
 
-    const toggleTodo = (e, id) => {
-        if (e.target.name === 'del_btn') return
+    const toggleTodo = (id) => {
         const newTodos = todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo))
         setTodos(newTodos)
     }
@@ -40,7 +45,22 @@ export function TodoProvider({ children }) {
         setTodos(newTodos)
     }
 
-    const value = { todos, addTodo, deleteTodo, toggleTodo, removeCompleted }
+    const updateTodo = (id, content) => {
+        const newTodos = todos.map((todo) => (todo.id === id ? { ...todo, content: content } : todo))
+        setTodos(newTodos)
+    }
+
+    const value = {
+        todos,
+        addTodo,
+        deleteTodo,
+        toggleTodo,
+        removeCompleted,
+        selecteDayTodo,
+        selectedDate,
+        setSelectedDate,
+        updateTodo,
+    }
 
     return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>
 }
