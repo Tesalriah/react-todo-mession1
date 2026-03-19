@@ -1,4 +1,7 @@
-function TodoForm({ removeCompleted, addTodo }) {
+import { useTodos } from '../hooks/useTodos'
+
+function TodoForm() {
+    const { removeCompleted, addTodo } = useTodos()
     const doSubmit = (e) => {
         e.preventDefault()
         const todo = e.target.todo.value
@@ -29,7 +32,7 @@ function TodoForm({ removeCompleted, addTodo }) {
                 <button
                     type="button"
                     className="mt-2 w-[85%] font-bold bg-gradient-to-b from-orange-600 to-red-600 text-white px-4 py-2 rounded hover:from-orange-700 hover:to-red-700 transition cursor-pointer"
-                    onClick={removeCompleted}
+                    onClick={() => removeCompleted()}
                 >
                     완료항목 제거
                 </button>

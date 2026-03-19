@@ -1,4 +1,8 @@
-function TodoItem({ todo, toggleTodo, deleteTodo }) {
+import { useTodos } from '../hooks/useTodos'
+
+function TodoItem({ todo }) {
+    const { toggleTodo, deleteTodo } = useTodos()
+
     return (
         <>
             <li
