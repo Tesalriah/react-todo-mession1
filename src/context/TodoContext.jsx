@@ -1,20 +1,24 @@
-import { createContext, useRef, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
+import { getStorage } from '../utils/storage'
 
 export const TodoContext = createContext()
 
 export function TodoProvider({ children }) {
-    const [todos, setTodos] = useState([
-        { id: 1, content: '밥먹기', completed: false },
-        { id: 2, content: '공부하기', completed: false },
-        { id: 3, content: '씻기', completed: false },
-    ])
-    const lastId = useRef(4)
+    const [todos, setTodos] = useState(getStorage())
+
+    useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(todos))
+    }, [todos])
 
     const addTodo = (content) => {
-        setTodos([...todos, { id: lastId.current++, content: content, completed: false }])
+        const newId = todos.length > 0 ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1
+        setTodos([...todos, { id: newId, content: content, completed: false }])
     }
 
     const deleteTodo = (id) => {
+        if (!confirm('정말 삭제하시겠습니까?')) {
+            return
+        }
         const newTodos = todos.filter((todo) => todo.id !== id)
         setTodos(newTodos)
     }
@@ -25,7 +29,15 @@ export function TodoProvider({ children }) {
         setTodos(newTodos)
     }
     const removeCompleted = () => {
-        setTodos(todos.filter((todo) => !todo.completed))
+        const newTodos = todos.filter((todo) => !todo.completed)
+        if (newTodos.length === todos.length) {
+            alert('완료된 일이 없습니다.')
+            return
+        }
+        if (!confirm('정말 완료된 항목들을 삭제하시겠습니까?')) {
+            return
+        }
+        setTodos(newTodos)
     }
 
     const value = { todos, addTodo, deleteTodo, toggleTodo, removeCompleted }

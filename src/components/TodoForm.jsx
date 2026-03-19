@@ -15,6 +15,9 @@ function TodoForm() {
 
     return (
         <>
+            <div className="font-bold text-[4rem] bg-gradient-to-b from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                Just Do It
+            </div>
             <form className="mt-5 w-full" onSubmit={doSubmit}>
                 <input
                     type="text"

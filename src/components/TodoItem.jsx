@@ -10,10 +10,12 @@ function TodoItem({ todo }) {
                 key={todo.id}
                 className="mt-3 border-2 border-gray-300 w-[85%] rounded flex items-center justify-between p-2 m-auto cursor-pointer"
             >
-                <input type="checkbox" className="w-5 h-5" checked={todo.completed}></input>
-                <div className="inline-block" style={todo.completed ? { 'text-decoration': 'line-through' } : {}}>
+                <input type="checkbox" className="w-5 h-5" checked={todo.completed} onChange={toggleTodo}></input>
+                <div
+                    className="inline-block text-lg"
+                    style={todo.completed ? { textDecoration: 'line-through', color: 'gray' } : {}}
+                >
                     {todo.content}
-                    {todo.id}
                 </div>
                 <button
                     type="button"
