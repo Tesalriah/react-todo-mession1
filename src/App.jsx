@@ -1,17 +1,36 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 function App() {
-    const [todos, setTodos] = useState(['밥먹기', '공부하기', '씻기'])
+    const [todos, setTodos] = useState([
+        { id: 1, content: '밥먹기', completed: false },
+        { id: 2, content: '공부하기', completed: false },
+        { id: 3, content: '씻기', completed: false },
+    ])
+    const lastId = useRef(4)
 
     const doSubmit = (e) => {
         e.preventDefault()
         const todo = e.target.todo.value
-        setTodos([...todos, todo])
+        if (!todo) {
+            alert('할일을 입력해주세요')
+            return
+        }
+        setTodos([...todos, { id: lastId.current++, content: todo, completed: false }])
+        e.target.todo.value = ''
     }
 
-    const deleteTodo = (index) => {
-        const newTodos = todos.filter((_, i) => i !== index)
+    const deleteTodo = (id) => {
+        const newTodos = todos.filter((todo) => todo.id !== id)
         setTodos(newTodos)
+    }
+
+    const toggleTodo = (e, id) => {
+        if (e.target.name === 'del_btn') return
+        const newTodos = todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo))
+        setTodos(newTodos)
+    }
+    const removeCompleted = () => {
+        setTodos(todos.filter((todo) => !todo.completed))
     }
 
     return (
@@ -36,22 +55,28 @@ function App() {
                 <button
                     type="button"
                     className="mt-2 w-[85%] font-bold bg-gradient-to-b from-orange-600 to-red-600 text-white px-4 py-2 rounded hover:from-orange-700 hover:to-red-700 transition cursor-pointer"
+                    onClick={removeCompleted}
                 >
                     완료항목 제거
                 </button>
             </form>
             <ul className="mt-5">
-                {todos.map((todo, index) => (
+                {todos.map((todo) => (
                     <li
-                        key={index}
+                        onClick={(e) => toggleTodo(e, todo.id)}
+                        key={todo.id}
                         className="mt-3 border-2 border-gray-300 w-[85%] rounded flex items-center justify-between p-2 m-auto cursor-pointer"
                     >
-                        <input type="checkbox" className="w-5 h-5"></input>
-                        <div className="inline-block">{todo}</div>
+                        <input type="checkbox" className="w-5 h-5" checked={todo.completed}></input>
+                        <div className="inline-block">
+                            {todo.content}
+                            {todo.id}
+                        </div>
                         <button
-                            type="submit"
+                            type="button"
+                            name="del_btn"
                             className="ml-2 text-2xl font-bold rounded cursor-pointer text-red-500 hover:text-red-700"
-                            onClick={() => deleteTodo(index)}
+                            onClick={() => deleteTodo(todo.id)}
                         >
                             X
                         </button>
