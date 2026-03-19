@@ -2,6 +2,6 @@
 
 #root {
     min-height: 100vh;
-    position: relative;
     background-color: #eff6ff;
+    padding: 50px;
 }

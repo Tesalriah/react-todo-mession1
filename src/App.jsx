@@ -9,8 +9,13 @@ function App() {
         setTodos([...todos, todo])
     }
 
+    const deleteTodo = (index) => {
+        const newTodos = todos.filter((_, i) => i !== index)
+        setTodos(newTodos)
+    }
+
     return (
-        <div className="absolute top-[30%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-[30px_0_50px_0] text-center shadow-[0_-6px_20px_rgba(0,0,0,0.15),0_6px_20px_rgba(0,0,0,0.15)] rounded-lg w-[500px] m-auto mt-10">
+        <div className="top-[10%] m-auto transform  bg-white p-[30px_0_50px_0] text-center shadow-[0_-6px_20px_rgba(0,0,0,0.15),0_6px_20px_rgba(0,0,0,0.15)] rounded-lg w-[500px] m-auto mt-10">
             <div className="font-bold text-[4rem] bg-gradient-to-b from-blue-500 to-purple-500 bg-clip-text text-transparent">
                 Just Do It
             </div>
@@ -46,6 +51,7 @@ function App() {
                         <button
                             type="submit"
                             className="ml-2 text-2xl font-bold rounded cursor-pointer text-red-500 hover:text-red-700"
+                            onClick={() => deleteTodo(index)}
                         >
                             X
                         </button>
